@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>we vue</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<style>
+		input{
+			border: 1px solid #333;
+		}
+	</style>
+</head>
+<body>
+
+<div id="app">
+    <p>姓名：{{user.name}}</p>
+	<p>年龄：{{user.age}}</p>
+	<div>
+		<input type="text" v-model="user.age">
+		<input type="text" v-model="user.name">
+	</div>
+</div>
+
+<script src="compile.js"></script>
+<script src="observer.js"></script>
+
+<script>
+	let Vue = function(options){
+		this.elem = document.querySelector(options.el)
+		this.ob = new Observer(options.data)
+
+		let dom = nodeTofragment(this.elem)
+			childNodes = dom.childNodes
+
+		for(var i = 0,length = childNodes.length; i < length; i++) {
+			compile(childNodes[i], options.data)
+		}
+
+		console.log("compiled")
+		this.elem.appendChild(dom)
+	}
+
+</script>
+
+<script>
+	let app = new Vue({
+	  el: '#app',
+	  data: {
+	    user: {
+	      name: 'allen',
+	      age: 22
+	    }
+	  }
+	});
+</script>
+</body>
+</html>

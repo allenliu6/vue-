@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>最简单的数据绑定</title>
+    <style>
+		input{
+			border: 1px solid #333;
+		}
+	</style>
+</head>
+
+<body>
+    <div id="app" style="text-align:center;">
+        <input id="input" type="text" v-model="name"><br> 姓名：
+        <span id="text">{{name}}</span>
+    </div>
+
+    <script>
+        const Vue = function (options) {
+            let {node, data} = options,
+                name = data.name,
+
+                // 编译正则匹配取到 对象两个node节点
+                input = document.querySelector("#input"),
+                text = document.querySelector("#text")
+
+            Object.defineProperty(data, "name", {
+                enumerable: true,
+                configurable: true,
+                set(newVal) {
+                    input.value = newVal
+                    text.innerHTML = newVal
+                },
+                get(){
+                    return name
+                }
+            })
+
+            input.addEventListener("input", function () {
+                data.name = this.value
+            })
+
+            // 编译后 利用setter初始化模板中的值   实际上是使用getter初始化
+            data.name = name
+        }
+
+        new Vue({
+            el: "#app",
+            data: {
+                name: "allen"
+            }
+        })
+    </script>
+
+</body>
+
+</html>
