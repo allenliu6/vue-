@@ -1,8 +1,8 @@
-var Observer = function(options, parent = null){
+var Observer = function (options, parent = null) {
 	this.data = options
 	this.parent = parent
 	this.event = {}
-	for(let key of Object.keys(options)){
+	for (let key of Object.keys(options)) {
 		if (typeof options[key] === 'object' && options[key] instanceof Object) {
 			new Observer(options[key], this)
 		}
@@ -10,14 +10,14 @@ var Observer = function(options, parent = null){
 	}
 }
 
-Observer.prototype.defineSetget = function(key, val){ // callback不好
+Observer.prototype.defineSetget = function (key, val) { // callback不好
 	let self = this
 	Object.defineProperty(this.data, key, {
-		get: function(){
+		get: function () {
 			console.log(`你访问了${key}`)
 			return val
 		},
-		set: function(newVal){
+		set: function (newVal) {
 			val = newVal
 			if (typeof val === 'object' && val instanceof Object) {
 				new Observer(val)
@@ -27,14 +27,14 @@ Observer.prototype.defineSetget = function(key, val){ // callback不好
 	})
 }
 
-Observer.prototype.$watch = function(key, fn){
+Observer.prototype.$watch = function (key, fn) {
 	this.event['set'] = this.event['set'] || []
 	this.event['set'].push(fn)
 }
 
-Observer.prototype.emit = function(){
+Observer.prototype.emit = function () {
 	if (this.event['set'] && this.event['set'].length) {
-		for(let fn of this.event['set']){
+		for (let fn of this.event['set']) {
 			fn()
 		}
 	}
